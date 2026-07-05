@@ -1,8 +1,10 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/users');
+const jwt = require('jsonwebtoken');
 
 const CREATED = 201;
 const BAD_REQUEST = 400;
+const UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
 
@@ -92,4 +94,22 @@ module.exports.updateAvatar = (req, res) => {
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: 'Internal server error' });
     });
+};
+
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
+
+  User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+      res.cookie('jwt', token, { httpOnly: true, secure: true });
+      res.send({ token });
+    })
+    .catch((err) => {
+      res.status(UNAUTHORIZED).send({ message: err.message });
+    });
+};
+
+module.exports.logout = (req, res) => {
+  res.clearCookie('jwt').send({ message: 'Logout successful' });
 };
