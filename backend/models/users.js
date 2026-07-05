@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const urlRegex = /^https?:\/\/(www\.)?[a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=%-]+#?$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -28,7 +29,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     validate: {
-      validator: (v) => urlRegex.test(v),
+      validator: (v) => emailRegex.test(v),
       message: '{VALUE} is not a valid email',
     },
   },
