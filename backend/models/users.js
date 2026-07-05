@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const urlRegex = /^https?:\/\/(www\.)?[a-zA-Z0-9._~:/?#[\]@!$&'()*+,;=%-]+#?$/;
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const userSchema = new mongoose.Schema({
   name: {
