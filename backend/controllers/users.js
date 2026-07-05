@@ -6,6 +6,12 @@ const BAD_REQUEST = 400;
 const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
 
+const throwNotFoundError = () => {
+  const error = new Error('User not found');
+  error.statusCode = NOT_FOUND;
+  throw error;
+};
+
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send({ data: users }))
@@ -14,11 +20,7 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUserById = (req, res) => {
   User.findById(req.params.id)
-    .orFail(() => {
-      const error = new Error('User not found');
-      error.statusCode = NOT_FOUND;
-      throw error;
-    })
+    .orFail(throwNotFoundError)
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -59,11 +61,7 @@ module.exports.updateUser = (req, res) => {
     { name, about },
     { new: true, runValidators: true },
   )
-    .orFail(() => {
-      const error = new Error('User not found');
-      error.statusCode = NOT_FOUND;
-      throw error;
-    })
+    .orFail(throwNotFoundError)
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -83,11 +81,7 @@ module.exports.updateAvatar = (req, res) => {
     { avatar },
     { new: true, runValidators: true },
   )
-    .orFail(() => {
-      const error = new Error('User not found');
-      error.statusCode = NOT_FOUND;
-      throw error;
-    })
+    .orFail(throwNotFoundError)
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
