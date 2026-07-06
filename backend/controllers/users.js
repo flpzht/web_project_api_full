@@ -112,3 +112,15 @@ module.exports.login = (req, res) => {
 module.exports.logout = (req, res) => {
   res.clearCookie('jwt').send({ message: 'Logout successful' });
 };
+
+module.exports.getCurrentUser = (req, res) => {
+  User.findById(req.user._id)
+    .orFail(throwNotFoundError)
+    .then((user) => res.send({ data: user }))
+    .catch((err) => {
+      if (err.statusCode === NOT_FOUND) {
+        return res.status(NOT_FOUND).send({ message: err.message });
+      }
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: 'Internal server error' });
+    });
+};

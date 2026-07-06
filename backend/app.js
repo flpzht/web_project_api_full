@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const users = require('./routes/users');
 const cards = require('./routes/cards');
-const { login, createUser } = require('./controllers/users');
+const { login, createUser, getCurrentUser } = require('./controllers/users');
 const auth = require('./middleware/auth');
 
 const app = express();
@@ -30,6 +30,7 @@ app.post('/signup', createUser);
 app.use(auth);
 
 app.use('/users', users);
+app.use('/users/me', getCurrentUser);
 app.use('/cards', cards);
 
 app.use((req, res) => {
