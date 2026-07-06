@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
-const User = require('../models/users');
 const jwt = require('jsonwebtoken');
+const User = require('../models/users');
 
 const CREATED = 201;
 const BAD_REQUEST = 400;
@@ -105,8 +105,8 @@ module.exports.login = (req, res) => {
       const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
       res.send({ token });
     })
-    .catch((err) => {
-      res.status(UNAUTHORIZED).send({ message: err.message });
+    .catch(() => {
+      res.status(UNAUTHORIZED).send({ message: 'Incorrect email or password' });
     });
 };
 
