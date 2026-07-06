@@ -2,6 +2,7 @@ const Card = require('../models/cards');
 
 const CREATED = 201;
 const BAD_REQUEST = 400;
+const FORBIDDEN = 403;
 const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
 
@@ -25,16 +26,28 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndDelete(req.params.id)
+  Card.findById(req.params.id)
     .then((card) => {
-      if (!card) {
-        return res.status(NOT_FOUND).send({ message: 'Card not found' });
+      if (card.owner.toString() !== req.user._id) {
+        return res.status(FORBIDDEN).send({ message: 'You are not the owner of this card' });
       }
-      return res.send({ data: card });
+      return Card.findByIdAndDelete(req.params.id)
+        .then((deletedCard) => {
+          if (!deletedCard) {
+            return res.status(NOT_FOUND).send({ message: 'Card not found' });
+          }
+          return res.send({ data: deletedCard });
+        });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         return res.status(BAD_REQUEST).send({ message: 'Invalid card ID' });
+      }
+      if (err.statusCode === NOT_FOUND) {
+        return res.status(NOT_FOUND).send({ message: 'Card not found' });
+      }
+      if (err.statusCode === FORBIDDEN) {
+        return res.status(FORBIDDEN).send({ message: 'You are not the owner of this card' });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: 'Internal server error' });
     });

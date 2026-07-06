@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const CREATED = 201;
 const BAD_REQUEST = 400;
 const UNAUTHORIZED = 401;
+const FORBIDDEN = 403;
 const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
 
@@ -120,6 +121,9 @@ module.exports.getCurrentUser = (req, res) => {
     .catch((err) => {
       if (err.statusCode === NOT_FOUND) {
         return res.status(NOT_FOUND).send({ message: err.message });
+      }
+      if (err.statusCode === FORBIDDEN) {
+        return res.status(FORBIDDEN).send({ message: 'You are not authorized to view this user' });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: 'Internal server error' });
     });
