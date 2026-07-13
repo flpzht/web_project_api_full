@@ -20,6 +20,7 @@ function App() {
   const [cards, setCards] = useState([]);
   const [popup, setPopup] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(null);
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -55,6 +56,7 @@ function App() {
     .authorize(email, password)
       .then((data) => {
         if (data.jwt) {
+          setToken(data.jwt);
           saveToken(data.jwt);
           setUserData({ email });
           setIsLoggedIn(true);
@@ -72,6 +74,7 @@ function App() {
 
    const handleLogout = () => {
         removeToken();
+        setToken(null);
         setIsLoggedIn(false);
         navigate('/signin');
     };
@@ -84,6 +87,7 @@ function App() {
       auth
       .checkToken(jwt)
       .then((userData) => {
+        setToken(jwt);
         setUserData({ email: userData.email });
         setIsLoggedIn(true);
       })
