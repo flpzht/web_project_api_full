@@ -10,7 +10,7 @@ import ProtectedRoute from './ProtectedRoute/ProtectedRoute'
 import InfoTooltip from './Main/components/Popup/components/InfoTooltip/InfoTooltip'
 import api from '../utils/api'
 import * as auth from '../utils/auth'
-import { getToken, setToken, removeToken } from '../utils/token'
+import { getToken, saveToken, removeToken } from '../utils/token'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 
 
@@ -55,7 +55,7 @@ function App() {
     .authorize(email, password)
       .then((data) => {
         if (data.jwt) {
-          setToken(data.jwt);
+          saveToken(data.jwt);
           setUserData({ email });
           setIsLoggedIn(true);
           const redirectPath = location.state?.from?.pathname || '/profile';
