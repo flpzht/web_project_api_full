@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
+const { errors } = require('celebrate');
+
 const users = require('./routes/users');
 const cards = require('./routes/cards');
 const { login, createUser, getCurrentUser } = require('./controllers/users');
@@ -25,6 +27,11 @@ app.use(auth);
 app.use('/users', users);
 app.use('/users/me', getCurrentUser);
 app.use('/cards', cards);
+
+app.use(errors());
+app.use((req, res) => {
+  res.status(404).send({ message: 'A solicitação não foi encontrada' });
+});
 
 app.use((err, req, res, next) => {
   res.status(err.statusCode).send({ message: err.message });
