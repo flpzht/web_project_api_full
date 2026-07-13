@@ -7,6 +7,7 @@ const BAD_REQUEST = 400;
 const UNAUTHORIZED = 401;
 const FORBIDDEN = 403;
 const NOT_FOUND = 404;
+const CONFLICT = 409;
 const INTERNAL_SERVER_ERROR = 500;
 
 const throwNotFoundError = () => {
@@ -50,6 +51,9 @@ module.exports.createUser = (req, res) => {
       },
     }))
     .catch((err) => {
+      if (err.code === 11000) {
+        return res.status(CONFLICT).send({ message: 'Email already exists' });
+      }
       if (err.name === 'ValidationError') {
         return res.status(BAD_REQUEST).send({ message: 'Invalid user data' });
       }
