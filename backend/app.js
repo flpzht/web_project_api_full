@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const users = require('./routes/users');
 const cards = require('./routes/cards');
 const { login, createUser, getCurrentUser } = require('./controllers/users');
+const { validateRegistration, validateLogin } = require('./middlewares/validation');
 const auth = require('./middlewares/auth');
 
 const app = express();
@@ -16,8 +17,8 @@ mongoose.connect('mongodb://localhost:27017/aroundb')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', validateLogin, login);
+app.post('/signup', validateRegistration, createUser);
 
 app.use(auth);
 
