@@ -25,8 +25,8 @@ app.use('/users', users);
 app.use('/users/me', getCurrentUser);
 app.use('/cards', cards);
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'A solicitação não foi encontrada' });
+app.use((err, req, res, next) => {
+  res.status(err.statusCode).send({ message: err.message });
 });
 
 app.listen(PORT, () => {

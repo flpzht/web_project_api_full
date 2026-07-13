@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
 
-const FORBIDDEN = 403;
+const UNAUTHORIZED = 401;
 
 const handleAuthError = (res) => {
-  res.status(FORBIDDEN).send({ message: 'Authorization required' });
+  res.status(UNAUTHORIZED).send({ message: 'Authorization required' });
 };
 
 module.exports = (req, res, next) => {
@@ -24,5 +24,5 @@ module.exports = (req, res, next) => {
 
   req.user = payload;
 
-  next();
+  return next();
 };
