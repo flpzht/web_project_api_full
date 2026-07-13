@@ -7,6 +7,7 @@ const users = require('./routes/users');
 const cards = require('./routes/cards');
 const { login, createUser, getCurrentUser } = require('./controllers/users');
 const { validateRegistration, validateLogin } = require('./middlewares/validation');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
 
 const app = express();
@@ -19,6 +20,8 @@ mongoose.connect('mongodb://localhost:27017/aroundb')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(requestLogger);
+
 app.post('/signin', validateLogin, login);
 app.post('/signup', validateRegistration, createUser);
 
@@ -28,10 +31,9 @@ app.use('/users', users);
 app.use('/users/me', getCurrentUser);
 app.use('/cards', cards);
 
+app.use(errorLogger);
+
 app.use(errors());
-app.use((req, res) => {
-  res.status(404).send({ message: 'A solicitação não foi encontrada' });
-});
 
 app.use((err, req, res, next) => {
   res.status(err.statusCode).send({ message: err.message });
