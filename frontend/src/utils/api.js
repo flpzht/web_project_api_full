@@ -1,15 +1,8 @@
-import { getToken } from "./token";
-
 class Api {
   constructor(options) {
     this._baseUrl = options.baseUrl;
     this._headers = options.headers;
   }
-
-  _headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${getToken()}`,
-  };
 
   _handleResponse(res) {
     if (res.ok) return res.json();
@@ -85,7 +78,11 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "http://localhost:3000",
+  baseUrl: "https://around-api.pt-br.tripleten-services.com/v1",
+  headers: {
+    Authorization: "63d45159-fd92-477c-9dd6-c2859fb9ad61",
+    "Content-Type": "application/json",
+  },
 });
 
 export default api;
