@@ -1,8 +1,15 @@
+import { getToken } from "./token";
+
 class Api {
   constructor(options) {
     this._baseUrl = options.baseUrl;
     this._headers = options.headers;
   }
+
+  _headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${getToken()}`,
+  };
 
   _handleResponse(res) {
     if (res.ok) return res.json();
@@ -79,9 +86,6 @@ class Api {
 
 const api = new Api({
   baseUrl: "http://localhost:3000",
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 export default api;

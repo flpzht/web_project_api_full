@@ -21,7 +21,6 @@ mongoose.connect('mongodb://localhost:27017/aroundb')
   .catch((err) => console.error('Error connecting to MongoDB:', err));
 
 app.use(cors());
-app.options('*', cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
