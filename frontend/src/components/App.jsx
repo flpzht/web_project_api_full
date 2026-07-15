@@ -100,7 +100,7 @@ function App() {
 
     api.getUserInfo()
       .then((userData) => {
-        setCurrentUser(userData);
+        setCurrentUser(userData.data);
       })
       .catch(console.error);
   }, [isLoggedIn]);
@@ -110,8 +110,8 @@ function App() {
     if (!isLoggedIn) return;
 
     api.getInitialCards()
-      .then((cards) => {
-        setCards(cards);
+      .then((cardsData) => {
+        setCards(cardsData.data);
       })
       .catch(console.error);
   }, [isLoggedIn]);
@@ -129,7 +129,7 @@ function App() {
     (async () => {
       await api.setUserInfo(data)
         .then((newData) => {
-          setCurrentUser(newData);
+          setCurrentUser(newData.data);
           handleClosePopup();
         })
         .catch((err) => {
@@ -142,7 +142,7 @@ function App() {
     (async () => {
       await api.changeAvatar(data)
         .then((newData) => {
-          setCurrentUser(newData);
+          setCurrentUser(newData.data);
           handleClosePopup();
         })
         .catch((err) => {
@@ -158,7 +158,7 @@ function App() {
       .then((newCard) => {
         setCards((state) =>
           state.map((currentCard) =>
-            currentCard._id === card._id ? newCard : currentCard
+            currentCard._id === card._id ? newCard.data : currentCard
           )
         );
       })
@@ -176,7 +176,7 @@ function App() {
   function handleAddPlaceSubmit(card) {
     api.addCard(card)
       .then((newCard) => {
-        setCards([newCard, ...cards]);
+        setCards([newCard.data, ...cards]);
         handleClosePopup();
       })
       .catch((error) => console.error(error));

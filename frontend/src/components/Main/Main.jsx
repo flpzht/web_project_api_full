@@ -45,9 +45,10 @@ function Main(props) {
             </section>
             <section className="cards page__section">
                 <ul className="cards__list">
-                    {cards.map((card) => (
-                        <Card key={card._id} card={{ ...card, onOpenPopup, onClosePopup }} onCardLike={onCardLike} onCardDelete={onCardDelete} />
-                    ))}
+                    {cards.map((card) => {
+                        const isLiked = card.likes.some((id) => id === currentUser._id);
+                        return <Card key={card._id} card={{ ...card, isLiked, onOpenPopup, onClosePopup }} onCardLike={onCardLike} onCardDelete={onCardDelete} />;
+                    })}
                 </ul>
             </section>
 
