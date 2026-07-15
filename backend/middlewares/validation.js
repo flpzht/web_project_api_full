@@ -56,9 +56,6 @@ module.exports.validateRegistration = celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
-    confirmPassword: Joi.string().required().valid(Joi.ref('password')).messages({
-      'any.only': 'Passwords do not match',
-    }),
   }),
 });
 
