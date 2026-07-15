@@ -16,11 +16,22 @@ const auth = require('./middlewares/auth');
 const app = express();
 const { PORT = 3000 } = process.env;
 
+const allowedCors = [
+  'https://flp-around-us.verymad.net',
+  'https://www.flp-around-us.verymad.net',
+  'http://localhost:3000',
+];
+
+app.use(cors({
+  origin: allowedCors,
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 mongoose.connect('mongodb://localhost:27017/aroundb')
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Error connecting to MongoDB:', err));
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
