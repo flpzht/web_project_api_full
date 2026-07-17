@@ -37,6 +37,13 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
+// Remover após revisão do projeto; usado apenas para testar o crash do servidor
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('O servidor travará agora');
+  }, 0);
+});
+
 app.post('/signin', validateLogin, login);
 app.post('/signup', validateRegistration, createUser);
 
