@@ -7,7 +7,7 @@ const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
 
 module.exports.getCards = (req, res) => {
-  Card.find({})
+  Card.find({ owner: req.user._id })
     .populate('owner')
     .then((cards) => res.send({ data: cards }))
     .catch(() => res.status(INTERNAL_SERVER_ERROR).send({ message: 'Internal server error' }));
